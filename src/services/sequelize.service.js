@@ -20,6 +20,9 @@ const sequelizeService = {
         }
       );
 
+      /*
+        Loading models automatically
+      */
       for (const file of modelFiles) {
         const model = await import(`../models/${file}`);
         model.default.init(connection);
