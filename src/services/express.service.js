@@ -10,7 +10,7 @@ import bodyParser from "body-parser";
 const routeFiles = fs
   .readdirSync(__dirname + "/../routes/")
   .filter(
-    (file) => file.endsWith(".js") && file.indexOf("index.route.js") == -1
+    (file) => file.endsWith(".js")
   );
 
 let server;
