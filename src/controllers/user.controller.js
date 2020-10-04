@@ -16,6 +16,7 @@ let userController = {
       if (!(await schema.isValid(req.body)))
         return res.status(400).json({ error: Errors.VALIDATION_FAILS });
 
+      console.log(req.body);
       const { email } = req.body;
 
       const userExists = await User.findOne({
