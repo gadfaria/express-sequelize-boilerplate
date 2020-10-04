@@ -21,8 +21,11 @@ yarn
 # Set the environment variables:
 cp .env.example .env
 
+# Set the database variables:
+src/config/config.json
+
 # Running the boilerplate:
-yarn start
+yarn dev
 ```
 
 <h5 align="center">
