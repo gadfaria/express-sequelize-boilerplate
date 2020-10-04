@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import bodyParser from "body-parser";
+import userRoutes from "../routes/user.routes"
 
 /*
   body-parser: Parse incoming request bodies in a middleware before your handlers, 
@@ -27,6 +28,8 @@ const expressService = {
         const routeName = Object.keys(route)[0];
         routes.push(route[routeName]);
       }
+
+
 
       server = express();
       server.use(bodyParser.json());

@@ -6,7 +6,7 @@
   "author": "gadfaria <gadfaria@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "aws-sdk": "^2.670.0",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
-    "sucrase": "^3.15.0"
+    "sucrase": "^3.15.0",
+    "sequelize-cli": "^5.5.1"
   }
 }
