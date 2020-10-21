@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "root",
-    "database": "teste1",
+    "database": "express-sequelize-boilerplate",
     "host": "localhost",
     "dialect": "mysql"
   }
