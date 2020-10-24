@@ -21,11 +21,26 @@ yarn
 # Set the environment variables:
 cp .env.example .env
 
-# Set the database variables:
-src/config/config.json
-
 # Running the boilerplate:
 yarn dev
+```
+
+## Commands for sequelize 
+```bash
+# Creates the database
+yarn sequelize db:create 
+
+# Drops the database
+yarn sequelize db:drop 
+
+# Load migrations
+yarn sequelize db:migrate 
+
+# Undo migrations
+yarn sequelize db:migrate:undo:all 
+
+# Load seeders
+yarn sequelize db:seed:all
 ```
 
 <h5 align="center">
