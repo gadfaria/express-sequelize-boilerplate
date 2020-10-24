@@ -5,15 +5,13 @@ const modelFiles = fs
   .readdirSync(__dirname + "/../models/")
   .filter((file) => file.endsWith(".js"));
 
-let connection;
-
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 
 const sequelizeService = {
   init: async () => {
     try {
-      connection = new Sequelize(
+      let connection = new Sequelize(
         config.database,
         config.username,
         config.password,
@@ -27,6 +25,11 @@ const sequelizeService = {
         const model = await import(`../models/${file}`);
         model.default.init(connection);
       }
+
+      modelFiles.map(async (file) => {
+        const model = await import(`../models/${file}`);
+        model.default.associate && model.default.associate(connection.models);
+      });
 
       console.log("[SEQUELIZE] Database service initialized");
     } catch (error) {

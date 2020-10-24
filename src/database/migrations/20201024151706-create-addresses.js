@@ -2,23 +2,26 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) =>
-    queryInterface.createTable("Users", {
+    queryInterface.createTable("Addresses", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
+      city: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      email: {
+      state: {
         allowNull: false,
-        unique: true,
         type: Sequelize.STRING,
       },
-      password_hash: {
+      neighborhood: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      country: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -34,5 +37,5 @@ module.exports = {
       },
     }),
 
-  down: (queryInterface) => queryInterface.dropTable("Users"),
+  down: (queryInterface) => queryInterface.dropTable("Addresses"),
 };

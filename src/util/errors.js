@@ -1,11 +1,15 @@
 export const Errors = {
+  ADDRESS_ALREADY_EXISTS: {
+    code: "ADDRESS_ALREADY_EXISTS",
+    message: "Address already exists",
+  },
+  NONEXISTENT_ADDRESS: {
+    code: "NONEXISTENT_ADDRESS",
+    message: "Address not found",
+  },
   USER_ALREADY_EXISTS: {
     code: "USER_ALREADY_EXISTS",
     message: "User already exists",
-  },
-  VALIDATION_FAILS: {
-    code: "VALIDATION_FAILS",
-    message: "Validation fails",
   },
   WRONG_PASSWORD: {
     code: "WRONG_PASSWORD",
@@ -14,6 +18,10 @@ export const Errors = {
   NONEXISTENT_USER: {
     code: "NONEXISTENT_USER",
     message: "User not found",
+  },
+  VALIDATION_FAILS: {
+    code: "VALIDATION_FAILS",
+    message: "Validation fails",
   },
   SERVER_ERROR: {
     code: "SERVER_ERROR",

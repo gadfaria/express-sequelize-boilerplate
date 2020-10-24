@@ -1,5 +1,6 @@
 import * as Yup from "yup";
-import User from "../models/user";
+import Address from "../models/Address";
+import User from "../models/User";
 import { Errors } from "../util/errors";
 
 //Yup is a JavaScript schema builder for value parsing and validation.
@@ -16,7 +17,6 @@ let userController = {
       if (!(await schema.isValid(req.body)))
         return res.status(400).json({ error: Errors.VALIDATION_FAILS });
 
-      console.log(req.body);
       const { email } = req.body;
 
       const userExists = await User.findOne({
@@ -31,6 +31,38 @@ let userController = {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
+      return res.status(500).json({ error: Errors.SERVER_ERROR });
+    }
+  },
+
+  addAddress: async (req, res) => {
+    try {
+      const { body, userId } = req;
+
+      const schema = Yup.object().shape({
+        city: Yup.string().required(),
+        state: Yup.string().required(),
+        neighborhood: Yup.string().required(),
+        country: Yup.string().required(),
+      });
+
+      if (!(await schema.isValid(body.address)))
+        return res.status(400).json({ error: Errors.VALIDATION_FAILS });
+
+      const user = await User.findByPk(userId);
+
+      let address = await Address.findOne({
+        where: { ...body.address },
+      });
+
+      if (!address) {
+        address = await Address.create(body.address);
+      }
+
+      await user.addAddress(address);
+
+      return res.status(200).json(user);
+    } catch (error) {
       return res.status(500).json({ error: Errors.SERVER_ERROR });
     }
   },
@@ -50,6 +82,8 @@ let userController = {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);
+
+      console.log(await user.countTeste());
 
       if (!user)
         return res.status(400).send({ error: Errors.NONEXISTENT_USER });

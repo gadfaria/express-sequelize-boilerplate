@@ -1,4 +1,4 @@
-import User from "../models/user";
+import User from "../models/User";
 import JwtService from "../services/jwt.service";
 import * as Yup from "yup";
 import { Errors } from "../util/errors";
