@@ -83,8 +83,6 @@ let userController = {
       const { id } = req.params;
       const user = await User.findByPk(id);
 
-      console.log(await user.countTeste());
-
       if (!user)
         return res.status(400).send({ error: Errors.NONEXISTENT_USER });
 

@@ -1,9 +1,0 @@
-{
-  "development": {
-    "username": "root",
-    "password": "root",
-    "database": "express-sequelize-boilerplate",
-    "host": "localhost",
-    "dialect": "mysql"
-  }
-}

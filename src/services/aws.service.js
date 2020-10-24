@@ -2,7 +2,6 @@ import fs from "fs";
 import AWS from "aws-sdk";
 import path from "path";
 import uuid from "uuid";
-//import { File } from "fastify-multer/lib/interfaces";
 
 let s3;
 const root = path.dirname(require.main.filename);

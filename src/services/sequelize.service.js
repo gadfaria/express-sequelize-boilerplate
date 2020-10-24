@@ -1,26 +1,20 @@
 import { Sequelize } from "sequelize";
+import databaseConfig from "../config/database";
 import fs from "fs";
 
 const modelFiles = fs
   .readdirSync(__dirname + "/../models/")
   .filter((file) => file.endsWith(".js"));
 
-const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.json")[env];
-
 const sequelizeService = {
   init: async () => {
     try {
-      let connection = new Sequelize(
-        config.database,
-        config.username,
-        config.password,
-        config
-      );
+      let connection = new Sequelize(databaseConfig);
 
       /*
         Loading models automatically
       */
+     
       for (const file of modelFiles) {
         const model = await import(`../models/${file}`);
         model.default.init(connection);
