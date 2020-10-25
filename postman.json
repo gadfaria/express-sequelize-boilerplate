@@ -9,13 +9,13 @@
 			"name": "user",
 			"item": [
 				{
-					"name": "addUser",
+					"name": "add",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Gabriel Faria\",\n    \"email\":\"gabriel@gmail.com\",\n    \"password\":\"123456\"\n}",
+							"raw": "{\n    \"name\": \"Gabriel Faria\",\n    \"email\": \"gabriel@gmail.com\",\n    \"password\": \"123456\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -35,7 +35,7 @@
 					"response": []
 				},
 				{
-					"name": "updateUser",
+					"name": "update",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -51,7 +51,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Gabriel Alves de Faria\"\n}",
+							"raw": "{\n    \"name\": \"Gabriel Alves de Faria\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -71,7 +71,7 @@
 					"response": []
 				},
 				{
-					"name": "getUsers",
+					"name": "get",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -106,7 +106,7 @@
 					"response": []
 				},
 				{
-					"name": "deleteUser",
+					"name": "delete",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -118,6 +118,43 @@
 							"path": [
 								"user",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": {\n        \"city\": \"Itajubá\",\n        \"state\": \"Minas Gerais\",\n        \"country\": \"Brasil\",\n        \"neighborhood\": \"Avenida\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/user/address",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user",
+								"address"
 							]
 						}
 					},
@@ -177,6 +214,38 @@
 							],
 							"path": [
 								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "address",
+			"item": [
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"city\": \"Itajubá\",\n    \"state\": \"Minas Gerais\",\n    \"country\": \"Brasil\",\n    \"neighborhood\": \"Avenida\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/address",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"address"
 							]
 						}
 					},
