@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import Address from "../models/Address";
 import User from "../models/User";
-import { Errors } from "../util/errors";
+import { Errors } from "../utils/errors";
 
 //Yup is a JavaScript schema builder for value parsing and validation.
 

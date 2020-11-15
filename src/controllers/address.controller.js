@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import Address from "../models/Address";
-import { Errors } from "../util/errors";
+import { Errors } from "../utils/errors";
 
 let addressController = {
   add: async (req, res) => {

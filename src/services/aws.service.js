@@ -74,7 +74,7 @@ const awsService = {
     console.log(`[AWS] Assigned uuid ${_uuid} to base64 file`);
     try {
       const base64File = file.split(";base64,").pop();
-      fs.writeFileSync(`${_uuid}.${extension}`, base64File, {
+      fs.writeFileSync(`${root}/${_uuid}.${extension}`, base64File, {
         encoding: "base64",
       });
       console.log(

@@ -1,8 +1,6 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller";
 import authMiddleware from "../middlewares/auth.middleware";
-// import multerConfig from "../util/multerConfig";
-// import multer from "multer";
 
 const userRoutes = Router();
 userRoutes.post("/user", userController.add);
