@@ -4,7 +4,7 @@
 </div>
 
 # express-sequelize-boilerplate
-A simple boilerplate for express.js.
+A boilerplate for express.js.
 
 ## Getting Started 
 
