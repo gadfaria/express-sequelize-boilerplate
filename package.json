@@ -19,7 +19,7 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "sequelize": "^6.21.2",
-    "uuid": "^8.3.2",
+    "uuid": "^9.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
