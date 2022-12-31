@@ -1,27 +1,36 @@
-<div style="display: inline">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/220px-Node.js_logo.svg.png" width="auto" height="64px">
-  <img src="https://expressjs.com/images/express-facebook-share.png" width="auto" height="64px">
-</div>
-
 # express-sequelize-boilerplate
-A boilerplate for express.js.
 
-## Getting Started 
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![Sequelize](https://img.shields.io/badge/Sequelize-52B0E7?style=for-the-badge&logo=Sequelize&logoColor=white)
+
+This is a simple boilerplate for building REST APIs in Node.js using Express. Intended for use with PostgreSQL using Sequelize ORM.
+
+
+## Getting Started
+
+Clone the repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/gadfaria/express-sequelize-boilerplate.git
+```
 
-# Enter into the directory
+Enter into the directory
+```bash
 cd express-sequelize-boilerplate/
+```
 
-# Install the dependencies
+Install the dependencies
+```bash
 yarn
+```
 
-# Set the environment variables:
+Set the environment variables
+```bash
 cp .env.example .env
+```
 
-# Running the boilerplate:
+Running the boilerplate:
+```bash
 yarn dev
 ```
 
@@ -44,7 +53,6 @@ Variables for the environment
 | AWS_SECRETKEY | User secret key |
 | AWS_BUCKET | Bucket name |
 
-
 ## Commands for sequelize 
 ```bash
 # Creates the database
@@ -62,6 +70,14 @@ yarn sequelize db:migrate:undo:all
 # Load seeders
 yarn sequelize db:seed:all
 ```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
 
 <h5 align="center">
   ☕ Code and Coffee
