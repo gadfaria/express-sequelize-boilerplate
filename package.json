@@ -20,7 +20,7 @@
     "mysql2": "^3.0.0",
     "sequelize": "^6.21.2",
     "uuid": "^9.0.0",
-    "yup": "^0.32.11"
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.18",
