@@ -2,11 +2,11 @@ import * as Yup from "yup";
 import Address from "../models/Address";
 import User from "../models/User";
 import { Errors } from "../utils/errors";
-
+import {ValidationError, BadRequestError, UnauthorizedError} from "../utils/ApiError"
 //Yup is a JavaScript schema builder for value parsing and validation.
 
 let userController = {
-  add: async (req, res) => {
+  add: async (req, res, next) => {
     try {
       const schema = Yup.object().shape({
         name: Yup.string().required(),
@@ -14,8 +14,7 @@ let userController = {
         password: Yup.string().required().min(6),
       });
 
-      if (!(await schema.isValid(req.body)))
-        return res.status(400).json({ error: Errors.VALIDATION_FAILS });
+      if (!(await schema.isValid(req.body))) throw new ValidationError()
 
       const { email } = req.body;
 
@@ -23,19 +22,17 @@ let userController = {
         where: { email },
       });
 
-      if (userExists)
-        return res.status(400).json({ error: Errors.USER_ALREADY_EXISTS });
+      if (userExists) throw new BadRequestError(Errors.USER_ALREADY_EXISTS.message);
 
       const user = await User.create(req.body);
 
       return res.status(200).json(user);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 
-  addAddress: async (req, res) => {
+  addAddress: async (req, res, next) => {
     try {
       const { body, userId } = req;
 
@@ -46,8 +43,7 @@ let userController = {
         country: Yup.string().required(),
       });
 
-      if (!(await schema.isValid(body.address)))
-        return res.status(400).json({ error: Errors.VALIDATION_FAILS });
+      if (!(await schema.isValid(body.address))) throw new ValidationError()
 
       const user = await User.findByPk(userId);
 
@@ -63,37 +59,34 @@ let userController = {
 
       return res.status(200).json(user);
     } catch (error) {
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 
-  get: async (req, res) => {
+  get: async (req, res, next) => {
     try {
       const users = await User.findAll();
 
       return res.status(200).json(users);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 
-  find: async (req, res) => {
+  find: async (req, res, next) => {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);
 
-      if (!user)
-        return res.status(400).send({ error: Errors.NONEXISTENT_USER });
+      if (!user) throw new BadRequestError(Errors.NONEXISTENT_USER.message);
 
       return res.status(200).json(user);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     try {
       const schema = Yup.object().shape({
         name: Yup.string(),
@@ -117,8 +110,7 @@ let userController = {
         }),
       });
 
-      if (!(await schema.isValid(req.body)))
-        return res.status(400).json({ error: Errors.VALIDATION_FAILS });
+      if (!(await schema.isValid(req.body))) throw new ValidationError()
 
       const { email, oldPassword } = req.body;
 
@@ -129,35 +121,31 @@ let userController = {
           where: { email },
         });
 
-        if (userExists)
-          return res.status(400).json({ error: Errors.USER_ALREADY_EXISTS });
+        if (userExists) throw new BadRequestError(Errors.USER_ALREADY_EXISTS.message);
       }
 
-      if (oldPassword && !(await user.checkPassword(oldPassword)))
-        return res.status(401).json({ error: Errors.WRONG_PASSWORD });
+      if (oldPassword && !(await user.checkPassword(oldPassword))) 
+        throw new UnauthorizedError(Errors.WRONG_PASSWORD.message);
 
       const newUser = await user.update(req.body);
 
       return res.status(200).json(newUser);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 
-  delete: async (req, res) => {
+  delete: async (req, res, next) => {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);
-      if (!user)
-        return res.status(400).send({ error: Errors.NONEXISTENT_USER });
+      if (!user) throw new BadRequestError(Errors.NONEXISTENT_USER.message);
 
       user.destroy();
 
       return res.status(200).json({ msg: "Deleted" });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 };

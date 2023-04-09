@@ -1,9 +1,9 @@
-import * as Yup from "yup";
-import Address from "../models/Address";
-import { Errors } from "../utils/errors";
-
+import * as Yup from 'yup';
+import Address from '../models/Address';
+import { Errors } from '../utils/errors';
+import {ValidationError, BadRequestError} from '../utils/ApiError';
 let addressController = {
-  add: async (req, res) => {
+  add: async (req, res, next) => {
     try {
       const schema = Yup.object().shape({
         city: Yup.string().required(),
@@ -12,22 +12,19 @@ let addressController = {
         country: Yup.string().required(),
       });
 
-      if (!(await schema.isValid(req.body)))
-        return res.status(400).json({ error: Errors.VALIDATION_FAILS });
+      if (!(await schema.isValid(req.body))) throw new ValidationError();
 
       const addressExists = await Address.findOne({
         where: { ...req.body },
       });
 
-      if (addressExists)
-        return res.status(400).json({ error: Errors.ADDRESS_ALREADY_EXISTS });
+      if (addressExists)throw new BadRequestError(Errors.ADDRESS_ALREADY_EXISTS.message);
 
       const address = await Address.create(req.body);
 
       return res.status(200).json(address);
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: Errors.SERVER_ERROR });
+      next(error)
     }
   },
 };
