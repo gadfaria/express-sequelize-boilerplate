@@ -1,4 +1,5 @@
 import JwtService from "../services/jwt.service";
+import {BadTokenError} from "../utils/ApiError"
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -12,8 +13,7 @@ const authMiddleware = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    console.log("[EXPRESS] Unauthorized error with JWT validation \n", error);
-    res.status(401).json({ error: "Token invalid" });
+    next(new BadTokenError())
   }
 };
 
