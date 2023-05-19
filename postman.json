@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "667c4085-5e85-4233-8e79-097c8a3faff7",
+		"name": "express-sequelize-boilerplate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Gabriel Faria\",\n    \"email\": \"gabriel@gmail.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/user",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Gabriel Alves de Faria\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/user",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/user",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/user/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/user/2",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAddress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": {\n        \"city\": \"Itajubá\",\n        \"state\": \"Minas Gerais\",\n        \"country\": \"Brasil\",\n        \"neighborhood\": \"Avenida\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/user/address",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"user",
+								"address"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"gabriel@gmail.com\",\n    \"password\":\"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/login",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/logout",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "address",
+			"item": [
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"city\": \"Itajubá\",\n    \"state\": \"Minas Gerais\",\n    \"country\": \"Brasil\",\n    \"neighborhood\": \"Avenida\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/address",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"address"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
