@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import Address from "../models/Address";
-import { BadRequestError, ValidationError } from "../utils/ApiError";
+import { ConflictError } from "../utils/ApiError";
+import { validate } from "../utils/validate";
 
 let addressController = {
   add: async (req, res, next) => {
@@ -12,17 +13,15 @@ let addressController = {
         country: Yup.string().required(),
       });
 
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
+      const data = await validate(schema, req.body);
 
-      const addressExists = await Address.findOne({
-        where: { ...req.body },
-      });
+      const addressExists = await Address.findOne({ where: data });
 
-      if (addressExists) throw new BadRequestError();
+      if (addressExists) throw new ConflictError("Address already exists");
 
-      const address = await Address.create(req.body);
+      const address = await Address.create(data);
 
-      return res.status(200).json(address);
+      return res.status(201).json(address);
     } catch (error) {
       next(error);
     }

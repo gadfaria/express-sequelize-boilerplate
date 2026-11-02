@@ -8,6 +8,8 @@ This is a simple boilerplate for building REST APIs in Node.js using Express. In
 
 ## Getting Started
 
+Requires Node.js 22 or newer.
+
 Clone the repository
 
 ```bash
@@ -29,10 +31,33 @@ Set the environment variables
 cp .env.example .env
 ```
 
-Running the boilerplate:
+Running the boilerplate in development (restarts on file changes):
 ```bash
 yarn dev
 ```
+
+Running in production:
+```bash
+yarn start
+```
+
+## Routes
+
+| Method | Route | Auth | Description |
+| ------ | ------ | ------ | ------ |
+| POST | /user | No | Sign up |
+| POST | /login | No | Returns a JWT |
+| GET | /logout | Yes | Revokes the current JWT |
+| GET | /user | Yes | Lists users |
+| GET | /user/:id | Yes | Finds a user |
+| PUT | /user | Yes | Updates the logged user. Changing the password requires `oldPassword` and `confirmPassword` |
+| DELETE | /user | Yes | Deletes the logged user |
+| POST | /user/address | Yes | Adds an address to the logged user |
+| POST | /address | Yes | Creates an address |
+
+Authenticated routes expect the header `Authorization: Bearer <token>`. Errors are returned as `{ "type": "...", "message": "..." }`.
+
+A Postman collection is available in `postman.json`.
 
 ## Configuration
 
@@ -41,15 +66,17 @@ Variables for the environment
 | Option | Description |
 | ------ | ------ |
 | SERVER_PORT | Port the server will run on |
-| NODE_ENV | development or production |
-| SERVER_JWT | true or false |
+| NODE_ENV | development or production. Internal error messages are only returned in development |
+| SERVER_JWT | true or false. When false, authenticated routes are open |
 | SERVER_JWT_SECRET | JWT secret |
-| SERVER_JWT_TIMEOUT | JWT duration time |
-| DB_DIALECT | "mysql", "postgresql", among others |
+| SERVER_JWT_TIMEOUT | JWT duration in seconds |
+| DB_DIALECT | "postgres" or "mysql" |
 | DB_HOST | Database host |
+| DB_PORT | Database port. Empty uses the dialect default (5432 for postgres, 3306 for mysql) |
 | DB_USER | Database username |
 | DB_PASS | Database password |
 | DB_NAME | Database name |
+| AWS_REGION | Bucket region, e.g. us-east-1 |
 | AWS_KEYID | Access key ID |
 | AWS_SECRETKEY | User secret key |
 | AWS_BUCKET | Bucket name |

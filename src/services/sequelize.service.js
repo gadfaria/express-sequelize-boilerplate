@@ -9,21 +9,23 @@ const modelFiles = fs
 const sequelizeService = {
   init: async () => {
     try {
-      let connection = new Sequelize(databaseConfig);
+      const connection = new Sequelize(databaseConfig);
 
       /*
         Loading models automatically
       */
-     
+      const models = [];
       for (const file of modelFiles) {
         const model = await import(`../models/${file}`);
-        model.default.init(connection);
+        models.push(model.default.init(connection));
       }
 
-      modelFiles.map(async (file) => {
-        const model = await import(`../models/${file}`);
-        model.default.associate && model.default.associate(connection.models);
-      });
+      // Associations can only be set once every model is initialized
+      for (const model of models) {
+        if (model.associate) model.associate(connection.models);
+      }
+
+      await connection.authenticate();
 
       console.log("[SEQUELIZE] Database service initialized");
     } catch (error) {

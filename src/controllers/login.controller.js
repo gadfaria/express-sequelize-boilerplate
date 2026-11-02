@@ -1,11 +1,8 @@
 import * as Yup from "yup";
 import User from "../models/User";
 import JwtService from "../services/jwt.service";
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ValidationError,
-} from "../utils/ApiError";
+import { UnauthorizedError } from "../utils/ApiError";
+import { validate } from "../utils/validate";
 
 let loginController = {
   login: async (req, res, next) => {
@@ -15,15 +12,13 @@ let loginController = {
         password: Yup.string().required(),
       });
 
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
-
-      let { email, password } = req.body;
+      const { email, password } = await validate(schema, req.body);
 
       const user = await User.findOne({ where: { email } });
 
-      if (!user) throw new BadRequestError();
-
-      if (!(await user.checkPassword(password))) throw new UnauthorizedError();
+      // Same error for unknown email and wrong password, so emails can't be enumerated
+      if (!user || !(await user.checkPassword(password)))
+        throw new UnauthorizedError();
 
       const token = JwtService.jwtSign(user.id);
 
@@ -37,7 +32,7 @@ let loginController = {
     try {
       JwtService.jwtBlacklistToken(JwtService.jwtGetToken(req));
 
-      res.status(200).json({ msg: "Authorized" });
+      res.status(200).json({ msg: "Logged out" });
     } catch (error) {
       next(error);
     }

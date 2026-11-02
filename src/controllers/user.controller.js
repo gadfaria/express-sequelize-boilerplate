@@ -2,10 +2,11 @@ import * as Yup from "yup";
 import Address from "../models/Address";
 import User from "../models/User";
 import {
-  BadRequestError,
+  ConflictError,
+  NotFoundError,
   UnauthorizedError,
-  ValidationError,
 } from "../utils/ApiError";
+import { validate } from "../utils/validate";
 
 //Yup is a JavaScript schema builder for value parsing and validation.
 
@@ -18,19 +19,17 @@ let userController = {
         password: Yup.string().required().min(6),
       });
 
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
-
-      const { email } = req.body;
+      const data = await validate(schema, req.body);
 
       const userExists = await User.findOne({
-        where: { email },
+        where: { email: data.email },
       });
 
-      if (userExists) throw new BadRequestError();
+      if (userExists) throw new ConflictError("Email already in use");
 
-      const user = await User.create(req.body);
+      const user = await User.create(data);
 
-      return res.status(200).json(user);
+      return res.status(201).json(user);
     } catch (error) {
       next(error);
     }
@@ -38,8 +37,6 @@ let userController = {
 
   addAddress: async (req, res, next) => {
     try {
-      const { body, userId } = req;
-
       const schema = Yup.object().shape({
         city: Yup.string().required(),
         state: Yup.string().required(),
@@ -47,21 +44,17 @@ let userController = {
         country: Yup.string().required(),
       });
 
-      if (!(await schema.isValid(body.address))) throw new ValidationError();
+      const data = await validate(schema, req.body?.address);
 
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(req.userId);
 
-      let address = await Address.findOne({
-        where: { ...body.address },
-      });
+      if (!user) throw new NotFoundError("User not found");
 
-      if (!address) {
-        address = await Address.create(body.address);
-      }
+      const [address] = await Address.findOrCreate({ where: data });
 
       await user.addAddress(address);
 
-      return res.status(200).json(user);
+      return res.status(200).json(await user.reload({ include: Address }));
     } catch (error) {
       next(error);
     }
@@ -79,10 +72,11 @@ let userController = {
 
   find: async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
+      const id = Number(req.params.id);
+      // Non-numeric ids would make the database throw instead of finding nothing
+      const user = Number.isInteger(id) ? await User.findByPk(id) : null;
 
-      if (!user) throw new BadRequestError();
+      if (!user) throw new NotFoundError("User not found");
 
       return res.status(200).json(user);
     } catch (error) {
@@ -95,45 +89,40 @@ let userController = {
       const schema = Yup.object().shape({
         name: Yup.string(),
         email: Yup.string().email(),
-        oldPassword: Yup.string().min(6),
-        password: Yup.string()
-          .min(6)
-          .when("oldPassword", (oldPassword, field) => {
-            if (oldPassword) {
-              return field.required();
-            } else {
-              return field;
-            }
-          }),
-        confirmPassword: Yup.string().when("password", (password, field) => {
-          if (password) {
-            return field.required().oneOf([Yup.ref("password")]);
-          } else {
-            return field;
-          }
-        }),
+        oldPassword: Yup.string().when("password", ([password], field) =>
+          password ? field.required() : field
+        ),
+        password: Yup.string().min(6),
+        confirmPassword: Yup.string().when("password", ([password], field) =>
+          password
+            ? field.required().oneOf([Yup.ref("password")], "Passwords must match")
+            : field
+        ),
       });
 
-      if (!(await schema.isValid(req.body))) throw new ValidationError();
-
-      const { email, oldPassword } = req.body;
+      const { oldPassword, confirmPassword, ...changes } = await validate(
+        schema,
+        req.body
+      );
 
       const user = await User.findByPk(req.userId);
 
-      if (email) {
+      if (!user) throw new NotFoundError("User not found");
+
+      if (changes.email && changes.email !== user.email) {
         const userExists = await User.findOne({
-          where: { email },
+          where: { email: changes.email },
         });
 
-        if (userExists) throw new BadRequestError();
+        if (userExists) throw new ConflictError("Email already in use");
       }
 
-      if (oldPassword && !(await user.checkPassword(oldPassword)))
+      if (changes.password && !(await user.checkPassword(oldPassword)))
         throw new UnauthorizedError();
 
-      const newUser = await user.update(req.body);
+      const updatedUser = await user.update(changes);
 
-      return res.status(200).json(newUser);
+      return res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
     }
@@ -141,11 +130,11 @@ let userController = {
 
   delete: async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const user = await User.findByPk(id);
-      if (!user) throw new BadRequestError();
+      const user = await User.findByPk(req.userId);
 
-      user.destroy();
+      if (!user) throw new NotFoundError("User not found");
+
+      await user.destroy();
 
       return res.status(200).json({ msg: "Deleted" });
     } catch (error) {

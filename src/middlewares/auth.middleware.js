@@ -1,5 +1,6 @@
+import { TokenExpiredError as JwtExpiredError } from "jsonwebtoken";
 import JwtService from "../services/jwt.service";
-import {BadTokenError} from "../utils/ApiError"
+import { BadTokenError, TokenExpiredError } from "../utils/ApiError";
 
 const authMiddleware = async (req, res, next) => {
   try {
@@ -7,13 +8,11 @@ const authMiddleware = async (req, res, next) => {
 
     const token = JwtService.jwtGetToken(req);
 
-    const decoded = JwtService.jwtVerify(token);
-
-    req.userId = decoded;
+    req.userId = JwtService.jwtVerify(token);
 
     return next();
   } catch (error) {
-    next(new BadTokenError())
+    next(error instanceof JwtExpiredError ? new TokenExpiredError() : new BadTokenError());
   }
 };
 

@@ -31,6 +31,10 @@ const DEFAULT_ERRORS = {
     code: "VALIDATION",
     message: "Validation error",
   },
+  CONFLICT: {
+    code: "CONFLICT",
+    message: "Resource already exists",
+  },
 };
 
 /**
@@ -105,6 +109,15 @@ export class ForbiddenError extends ApiError {
     type = DEFAULT_ERRORS.FORBIDDEN.code
   ) {
     super(message, 403, type);
+  }
+}
+
+export class ConflictError extends ApiError {
+  constructor(
+    message = DEFAULT_ERRORS.CONFLICT.message,
+    type = DEFAULT_ERRORS.CONFLICT.code
+  ) {
+    super(message, 409, type);
   }
 }
 

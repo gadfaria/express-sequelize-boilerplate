@@ -83,6 +83,16 @@
 							"path": [
 								"user"
 							]
+						},
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
 						}
 					},
 					"response": []
@@ -101,6 +111,16 @@
 								"user",
 								"1"
 							]
+						},
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
 						}
 					},
 					"response": []
@@ -111,13 +131,22 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/user/2",
+							"raw": "{{server_url}}/user",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
-								"user",
-								"2"
+								"user"
+							]
+						},
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
 							]
 						}
 					},
@@ -246,6 +275,16 @@
 							],
 							"path": [
 								"address"
+							]
+						},
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
 							]
 						}
 					},
